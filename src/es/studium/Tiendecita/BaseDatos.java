@@ -352,4 +352,53 @@ public class BaseDatos
 		}
 		return (resultado);
 	}
+	public String consultarTicketsTablaPDF1(Connection c)
+	{
+		String resultado = "";
+		try
+		{
+			String sentencia = "SELECT * FROM tickets";
+			//Crear una sentencia
+			statement = c.createStatement();
+			//Crear un objeto ResultSet para guardar lo obtenido
+			//y ejecutar la sentencia SQL
+			rs = statement.executeQuery(sentencia);
+			while (rs.next())
+			{
+				resultado = resultado + rs.getInt("idTicket") + " - " +
+						rs.getString("fechaTicket") + " - " +
+						rs.getString("totalTicket")+ "\n";
+			}
+		}
+		catch (SQLException sqle)
+		{
+			System.out.println("Error consultarTicketsTabla-"+sqle.getMessage());
+		}
+		return (resultado);
+	}
+	public String consultarTicketsTablaPDF2(Connection c, String idTicketConsultar)
+	{
+		String resultado = "";
+		try
+		{
+			
+			String sentencia = "SELECT descripcionArticulo, articulostickets.cantidadArticulo, precioArticulo FROM tiendecita.articulos, tiendecita.articulostickets, tiendecita.tickets where idTicket="+idTicketConsultar+" AND idArticulo=idArticuloFK1 AND idTicket=idTicketFK2";
+			//Crear una sentencia
+			statement = c.createStatement();
+			//Crear un objeto ResultSet para guardar lo obtenido
+			//y ejecutar la sentencia SQL
+			rs = statement.executeQuery(sentencia);
+			while (rs.next())
+			{
+				resultado = resultado + rs.getString("descripcionArticulo") + " - " +
+						rs.getString("articulostickets.cantidadArticulo") + " - " +
+						rs.getString("precioArticulo")+"\n";
+			}
+		}
+		catch (SQLException sqle)
+		{
+			System.out.println("Error consultarTicketsTabla2-"+sqle.getMessage());
+		}
+		return (resultado);
+	}
 }

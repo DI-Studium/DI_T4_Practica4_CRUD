@@ -1,4 +1,4 @@
- package es.studium.Tiendecita;
+package es.studium.Tiendecita;
 
 import java.awt.EventQueue;
 

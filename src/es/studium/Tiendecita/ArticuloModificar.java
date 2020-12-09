@@ -1,11 +1,8 @@
 package es.studium.Tiendecita;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -28,22 +25,6 @@ public class ArticuloModificar extends JFrame {
 	private JTextField textDescripcion;
 	private JTextField textPrecio;
 	private JTextField textCantidad;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ArticuloModificar frame = new ArticuloModificar();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

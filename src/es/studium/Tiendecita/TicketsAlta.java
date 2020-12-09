@@ -1,26 +1,19 @@
 package es.studium.Tiendecita;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-
 import java.awt.Font;
 import javax.swing.JTextField;
-
 import java.awt.BorderLayout;
 import java.awt.Choice;
 import java.awt.Dimension;
-
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import com.toedter.calendar.JDateChooser;
-
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.sql.Connection;
@@ -56,22 +49,6 @@ public class TicketsAlta extends JFrame {
 	 Object[] data = new Object[4];
 	BaseDatos bd = new BaseDatos();
 	Connection conexion = null;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TicketsAlta frame = new TicketsAlta();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the frame.
 	 * @throws ParseException 

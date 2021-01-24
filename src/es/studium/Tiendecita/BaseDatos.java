@@ -8,6 +8,8 @@ import java.sql.Statement;
 
 public class BaseDatos
 {
+	String fecha;
+	String fecha2;
 	String BaseDatos="tiendecita";
 	String login="root";
 	String password="";
@@ -296,6 +298,34 @@ public class BaseDatos
 						rs.getString("fechaTicket") + "#" +
 						rs.getString("totalTicket")+ "#";
 			}
+		}
+		catch (SQLException sqle)
+		{
+			System.out.println("Error consultarTicketsTabla-"+sqle.getMessage());
+		}
+		return (resultado);
+	}
+	public String consultarTicketsTablaFecha(Connection c, String fecha, String fecha2)
+	{
+		String resultado = "";
+		this.fecha=fecha;
+		this.fecha2=fecha2;
+		try
+		{
+			String sentencia = "SELECT * FROM tickets where fechaTicket between \""+fecha+"\" and \""+fecha2+"\";";
+			System.out.println(sentencia);
+			//Crear una sentencia
+			statement = c.createStatement();
+			//Crear un objeto ResultSet para guardar lo obtenido
+			//y ejecutar la sentencia SQL
+			rs = statement.executeQuery(sentencia);
+			while (rs.next())
+			{
+				resultado = resultado + rs.getInt("idTicket") + "#" +
+						rs.getString("fechaTicket") + "#" +
+						rs.getString("totalTicket")+ "#";
+			}
+			System.out.println(resultado);
 		}
 		catch (SQLException sqle)
 		{

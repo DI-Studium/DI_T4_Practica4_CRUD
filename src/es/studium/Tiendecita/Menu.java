@@ -45,7 +45,7 @@ public class Menu extends JFrame implements ActionListener {
 	JMenuItem mntmArticulosConsulta = new JMenuItem("Consulta");
 	JMenuItem mntmTicketsAlta = new JMenuItem("Alta");
 	JMenuItem mntmTicketsConsulta = new JMenuItem("Consulta");
-	
+	JMenuItem mntmTicketsConsultaFecha = new JMenuItem("Consulta Fecha");
 	public Menu() {
 		setTitle("Tiendecita");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -69,7 +69,8 @@ public class Menu extends JFrame implements ActionListener {
 
 		mnTickets.add(mntmTicketsAlta);
 		mnTickets.add(mntmTicketsConsulta);
-
+		mnTickets.add(mntmTicketsConsultaFecha);
+		
 		mntmArticulosAlta.addActionListener(this);
 		mntmArticulosBaja.addActionListener(this);
 		mntmArticulosModificacion.addActionListener(this);
@@ -77,6 +78,7 @@ public class Menu extends JFrame implements ActionListener {
 		
 		mntmTicketsAlta.addActionListener(this);
 		mntmTicketsConsulta.addActionListener(this);
+		mntmTicketsConsultaFecha.addActionListener(this);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -99,7 +101,6 @@ public class Menu extends JFrame implements ActionListener {
 			new ArticulosConsulta();
 		}
 		if (e.getSource()==mntmTicketsAlta) {
-			System.out.println("Alta");
 			try {
 				new TicketsAlta();
 			} catch (ParseException e1) {
@@ -108,8 +109,10 @@ public class Menu extends JFrame implements ActionListener {
 			}
 		}
 		if (e.getSource()==mntmTicketsConsulta) {
-			System.out.println("Consulta");
 			new TicketsConsulta();
+		}
+		if (e.getSource()==mntmTicketsConsultaFecha) {
+			new TicketsConsultaFecha();
 		}
 	}
 }

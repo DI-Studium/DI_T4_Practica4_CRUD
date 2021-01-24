@@ -12,13 +12,17 @@ import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Connection;
+import java.util.HashMap;
 import java.awt.event.ActionEvent;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 public class ArticulosConsulta extends JFrame {
 	BaseDatos bd = new BaseDatos();
 	Connection conexion = null;
@@ -109,67 +113,34 @@ public class ArticulosConsulta extends JFrame {
 		setVisible(true);
 	}
 	public void imprimirPDF(){
-		// Se crea el documento 
-				Document documento = new Document();
-				try 
-				{ 
-					// Se crea el OutputStream para el fichero donde queremos dejar el pdf. 
-					FileOutputStream ficheroPdf = new FileOutputStream("ConsultaArticulos.pdf");
-					PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(22);
-					// Se abre el documento. 
-					documento.open();
-					Paragraph titulo = new Paragraph("Listado de Articulos", 
-							FontFactory.getFont("arial", // fuente 
-									22, // tamaño 
-									Font.ITALIC, // estilo 
-									BaseColor.BLUE)); // color
-					titulo.setAlignment(Element.ALIGN_CENTER);
-					documento.add(titulo);
-					// Sacar los datos
-					conexion = bd.conectar();
-					String[] cadena = bd.consultarArticulos(conexion).split("\n");
-					bd.desconectar(conexion);
-					PdfPTable tabla = new PdfPTable(4); // Se indica el número de columnas
-					tabla.setSpacingBefore(5); // Espaciado ANTES de la tabla
-					tabla.addCell("Id Articulo");
-					tabla.addCell("Descripcion Articulo");
-					tabla.addCell("Unidades");
-					tabla.addCell("Precio");
-					
-					// En cada posición de cadena tenemos un registro completo
-					
-					String[] subCadena;
-					// En subCadena, separamos cada campo por -
-					// subCadena[0] = id
-					// subCadena[1] = descripcion
-					// subCadena[2] = cantidad
-					// subCadena[3] = precio
-					for (int i = 0; i < cadena.length; i++) 
-					{
-						subCadena = cadena[i].split("-");
-						for(int j = 0; j < 4;j++)
-						{
-							tabla.addCell(subCadena[j]);
-						}
-					}
-					documento.add(tabla); 
-					documento.close(); 
-					//Abrimos el archivo PDF recién creado 
-					try 
-					{
-						File path = new File ("ConsultaArticulos.pdf"); 
-						Desktop.getDesktop().open(path); 
-					}
-					catch (IOException ex) 
-					{
-						//System.out.println("Se ha producido un error al abrir el archivo PDF"); 
-						System.err.println("Error: "+ex);
-					}
-				}
-				catch ( Exception e ) 
-				{ 
-					//System.out.println("Se ha producido un error al generar el archivo PDF"); 
-					System.err.println("Error: "+e);
-				}
+		try 
+		{ 
+			// Compilar el informe generando fichero jasper
+			JasperCompileManager.compileReportToFile("ArticulosTiendecita.jrxml");
+			System.out.println("Fichero ArticulosTiendecita.jasper generado CORRECTAMENTE!"); 
+			// Objeto para guardar parámetros necesarios para el informe 
+			HashMap<String,Object> parametros = new HashMap<String,Object>();
+			//Guardamos los parametros del informe
+			parametros.put("titulo", "Listado de  artículos");
+			// Cargar el informe compilado 
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile("ArticulosTiendecita.jasper"); 
+			// Conectar a la base de datos para sacar la información 
+			Connection conexion2 = bd.conectar();
+			// Completar el informe con los datos de la base de datos 
+			JasperPrint print = JasperFillManager.fillReport(report, parametros, conexion2);
+			//Desconexion de la BD
+			bd.desconectar(conexion2);
+			// Mostrar el informe en JasperViewer 
+			JasperViewer.viewReport(print, false); 
+			// Para exportarlo a pdf 
+			JasperExportManager.exportReportToPdfFile(print, "ArticulosTiendecita.pdf");
+			// Abrir el fichero PDF generado 
+			File path = new File ("ArticulosTiendecita.pdf");
+			Desktop.getDesktop().open(path);
+		} 
+		catch (Exception e) 
+		{ 
+			System.out.println("Error: " + e.toString()); 
+		}
 	}
 }

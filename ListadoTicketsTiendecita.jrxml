@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListaTicketsTiendecita" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18f0f8f3-26f3-47a2-ab7b-4b6d0284a885">
+	<property name="ireport.zoom" value="1.6105100000000043"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from tickets;]]>
+	</queryString>
+	<field name="idTicket" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fechaTicket" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="totalTicket" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="descripcionArticulo">
+		<groupExpression><![CDATA[$F{fechaTicket}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="33" forecolor="#0000CC" backcolor="#CCFFCC" uuid="04ad1130-269b-40bf-99eb-2c721f48ebae"/>
+				<textElement textAlignment="Center">
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="16" y="3" width="98" height="20" forecolor="#0066FF" backcolor="#CCCCCC" uuid="9419cf0f-2374-4693-a587-e282929386ea"/>
+				<text><![CDATA[Id Ticket]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="116" y="3" width="240" height="20" forecolor="#0066FF" backcolor="#CCCCCC" uuid="008c5cf4-e596-41a5-9ecd-222e6082d9a4"/>
+				<text><![CDATA[Fecha Ticket]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="359" y="3" width="98" height="20" forecolor="#0066FF" backcolor="#CCCCCC" uuid="d7edc6be-3ad2-44f7-beb1-b0a45b3fd08c"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="16" y="0" width="98" height="20" uuid="91ff792b-0ec9-4628-b819-3ed7ffc28a19"/>
+				<textElement>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idTicket}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="116" y="0" width="241" height="20" uuid="c02c875f-e077-44a2-8e0b-b49fd371a7e7"/>
+				<textElement>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fechaTicket}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="0" width="98" height="20" uuid="f2c23aca-8db5-4c91-8ed5-064216fccdbf"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{totalTicket}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="16" y="20" width="441" height="1" uuid="d7be43be-5336-4842-b27b-6a2e93aeb0a1"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="16" y="0" width="1" height="21" uuid="cbbe69fc-4f65-48be-a641-99c600544e52"/>
+			</line>
+			<line>
+				<reportElement x="116" y="0" width="1" height="20" uuid="5ae6e3c7-85d7-40c5-9072-62c748e8bab7"/>
+			</line>
+			<line>
+				<reportElement x="357" y="0" width="1" height="20" uuid="3b1d1e87-0c01-41ea-8a7f-4a02b522b4ab"/>
+			</line>
+			<line>
+				<reportElement x="17" y="0" width="440" height="1" uuid="97474c31-51d3-4989-af2e-a879a1ae0683"/>
+			</line>
+			<line>
+				<reportElement x="457" y="0" width="1" height="21" uuid="45cd0fd6-d337-4597-a2e4-8e1d7e0673f7"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="426" y="10" width="80" height="20" uuid="396e623f-33e3-4b12-bee2-5b41553896f0"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="506" y="10" width="40" height="20" uuid="3a87e11c-2c5d-4f91-9ff5-e18ca29e97a1"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

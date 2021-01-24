@@ -10,18 +10,19 @@ import javax.swing.JButton;
 import java.awt.Choice;
 import java.awt.Desktop;
 import javax.swing.table.DefaultTableModel;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Connection;
+import java.util.HashMap;
 import java.awt.event.ActionEvent;
 
 public class TicketsConsulta extends JFrame {
@@ -170,65 +171,37 @@ public class TicketsConsulta extends JFrame {
 		setVisible(true);
 	}
 	public void imprimirPDF(){
-		// Se crea el documento 
-		Document documento = new Document();
 		try 
 		{ 
-			// Se crea el OutputStream para el fichero donde queremos dejar el pdf. 
-			FileOutputStream ficheroPdf = new FileOutputStream("ConsultaTicketGeneral.pdf");
-			PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(22);
-			// Se abre el documento. 
-			documento.open();
-			Paragraph titulo = new Paragraph("Listado de Tickets", 
-					FontFactory.getFont("arial", // fuente 
-							22, // tamaño 
-							Font.ITALIC, // estilo 
-							BaseColor.BLUE)); // color
-			titulo.setAlignment(Element.ALIGN_CENTER);
-			documento.add(titulo);
-			// Sacar los datos
-			conexion = bd.conectar();
-			String[] cadena = bd.consultarTicketsTablaPDF1(conexion).split("\n");
-			bd.desconectar(conexion);
-			PdfPTable tabla = new PdfPTable(3); // Se indica el número de columnas
-			tabla.setSpacingBefore(5); // Espaciado ANTES de la tabla
-			tabla.addCell("id Tickets");
-			tabla.addCell("Fecha Tickets");
-			tabla.addCell("Total Tickets");
-
-			// En cada posición de cadena tenemos un registro completo
-
-			String[] subCadena;
-			// En subCadena, separamos cada campo por -
-			// subCadena[0] = id
-			// subCadena[1] = Fecha
-			// subCadena[2] = Total
-			for (int i = 0; i < cadena.length; i++) 
-			{
-				subCadena = cadena[i].split(" - ");
-				for(int j = 0; j < 3;j++)
-				{
-					tabla.addCell(subCadena[j]);
-				}
-			}
-			documento.add(tabla); 
-			documento.close(); 
-			//Abrimos el archivo PDF recién creado 
-			try 
-			{
-				File path = new File ("ConsultaTicketGeneral.pdf"); 
-				Desktop.getDesktop().open(path); 
-			}
-			catch (IOException ex) 
-			{
-				//System.out.println("Se ha producido un error al abrir el archivo PDF"); 
-				System.err.println("Error: "+ex);
-			}
-		}
-		catch ( Exception e ) 
+			// Compilar el informe generando fichero jasper
+			JasperCompileManager.compileReportToFile("ListadoTicketsTiendecita.jrxml");
+			System.out.println("Fichero ListadoTicketsTiendecita.jasper generado CORRECTAMENTE!"); 
+			// Objeto para guardar parámetros necesarios para el informe 
+			HashMap<String,Object> parametros = new HashMap<String,Object>();
+			//Guardamos los parametros del informe
+			
+	
+			
+			parametros.put("titulo", "Listado de  Tickets");
+			// Cargar el informe compilado 
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile("ListadoTicketsTiendecita.jasper"); 
+			// Conectar a la base de datos para sacar la información 
+			Connection conexion2 = bd.conectar();
+			// Completar el informe con los datos de la base de datos 
+			JasperPrint print = JasperFillManager.fillReport(report, parametros, conexion2);
+			//Desconexion de la BD
+			bd.desconectar(conexion2);
+			// Mostrar el informe en JasperViewer 
+			JasperViewer.viewReport(print, false); 
+			// Para exportarlo a pdf 
+			JasperExportManager.exportReportToPdfFile(print, "ListadoTicketsTiendecita.pdf");
+			// Abrir el fichero PDF generado 
+			File path = new File ("ListadoTicketsTiendecita.pdf");
+			Desktop.getDesktop().open(path);
+		} 
+		catch (Exception e) 
 		{ 
-			//System.out.println("Se ha producido un error al generar el archivo PDF"); 
-			System.err.println("Error: "+e);
+			System.out.println("Error: " + e.toString()); 
 		}
 	}
 }
